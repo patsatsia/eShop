@@ -1,11 +1,12 @@
 from django.urls import path, include
-from .views import CategoryView
-
 from rest_framework import routers
 from rest_framework.routers import DefaultRouter
 
+from products.api.views import ProductView
+
 router = DefaultRouter()
-router.register(r'', CategoryView)
+router.register(r'', ProductView)
+
 
 urlpatterns = [
     path("", include(router.urls))
