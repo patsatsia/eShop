@@ -17,9 +17,11 @@ class ProductView(viewsets.ModelViewSet):
         serializer.save(updated_by = self.request.user)
 
     def perform_destroy(self, instance):
-        instance.deleted_by = self.request.user
+        instance.deleted_by = self.request.user 
         instance.deleted_at = timezone.now()
-        instance.save
+        instance.save()
+
+
 
 
 
