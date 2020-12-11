@@ -3,7 +3,7 @@ from products.models import Product
 from category.models import Category
 from category.api.serializers import CategorySerializer
 from django.contrib.auth.models import User
-from dj_rest_auth.serializers import LoginSerializer, UserDetailsSerializer
+from dj_rest_auth.serializers import UserDetailsSerializer
 
 class ProductSerializer(serializers.ModelSerializer):
     category     = CategorySerializer(many=True, required=False, read_only=True)  
@@ -22,30 +22,16 @@ class ProductSerializer(serializers.ModelSerializer):
         # depth = 1
 
     def create(self, validated_data):
-        validated_data.pop("category")
-        category_ids = self.context.get('request').data.get('category_ids')
-        product = Product.objects.create(**validated_data)
-        for item in category_ids:
-            category = Category.objects.get(id=item)
-            product.category.add(category)
+        categories = validated_data.pop("category")
+        product = super().create(validated_data)
+        for item in categories:
+            product.category.add(item)
         return product
 
     
     def update(self, instance, validated_data):
-        instance.name = validated_data["name"]
-        instance.price = validated_data["price"]
-        instance.description = validated_data["description"]
-        instance.quantity = validated_data["quantity"]
-
-        instance.updated_by = self.context['request'].user #????????
-
-        category_ids = self.context.get('request').data.get('category_ids')
-        instance.category.set(category_ids)
-
-        # instance.category.clear()
-        # for item in category_ids:
-        #     category = Category.objects.get(id=item)
-        #     instance.category.add(item)        
+        categories = validated_data.pop("category")
+        instance = super().update(instance, validated_data)
+        instance.category.set(categories)
         instance.save()
-        
         return instance

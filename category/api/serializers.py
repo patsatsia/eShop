@@ -7,3 +7,6 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ("id", "name", "created_at", "created_by", "updated_at", "updated_by", "deleted_at", "deleted_by",)
+        # depth = 1
+
+        #fields = ("id", "name", "created_by", "updated_by", "deleted_by",)
