@@ -20,4 +20,4 @@ class CartItem(models.Model):
     quantity = models.PositiveIntegerField()
 
     def __str__(self):
-        return "{}'s Cart: {} ({})".format(self.user, self.product, self.quantity)
+        return self.id
