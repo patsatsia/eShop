@@ -1,6 +1,7 @@
 from products.api.serializers import ProductSerializer
 from rest_framework import views, viewsets
 from products.models import Product
+from django.utils import timezone
 
 from rest_framework import permissions
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
@@ -9,11 +10,17 @@ class ProductView(viewsets.ModelViewSet):
     serializer_class = ProductSerializer
     queryset = Product.objects.all()
 
-    def get_permissions(self):
-        if self.request.method == "GET":
-            self.permission_classes = (AllowAny, )
-        else:
-            self.permission_classes = (IsAdminUser, )
+    def perform_create(self, serializer):
+        serializer.save(created_by = self.request.user)
 
-        return super(ProductView, self).get_permissions()
+    def perform_update(self, serializer):
+        serializer.save(updated_by = self.request.user)
+
+    def perform_destroy(self, instance):
+        instance.deleted_by = self.request.user 
+        instance.deleted_at = timezone.now()
+        instance.save()
+
+
+
 

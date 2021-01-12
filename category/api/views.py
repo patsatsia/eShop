@@ -9,16 +9,16 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
 class CategoryView(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
-    queryset = Category.objects.filter(deleted_by = None)
+    queryset = Category.objects.filter(deleted_by=None)
     #permission_classes = (IsAdminUser, )
 
     def perform_create(self, serializer):
-        serializer.save(created_by = self.request.user)
+        serializer.save(created_by=self.request.user)
 
     def perform_update(self, serializer):
         serializer.save(updated_by=self.request.user)
 
     def perform_destroy(self, instance):
-        instance.deleted_by = self.request.user 
-        instance.deleted_at = timezone.now()
+        instance.deleted_by=self.request.user 
+        instance.deleted_at=timezone.now()
         instance.save()
