@@ -33,5 +33,4 @@ class ProductSerializer(serializers.ModelSerializer):
         categories = validated_data.pop("category")
         instance = super().update(instance, validated_data)
         instance.category.set(categories)
-        instance.save()
         return instance
