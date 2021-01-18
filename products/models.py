@@ -12,7 +12,7 @@ class Product(models.Model):
     created_by = models.ForeignKey(User, default = None, blank=True, null=True, on_delete=models.DO_NOTHING, related_name="products_created_by")
     updated_at = models.DateTimeField(auto_now = True, null = True)
     updated_by = models.ForeignKey(User, default = None, blank=True, null=True, on_delete=models.DO_NOTHING, related_name="products_updated_by")
-    deleted_at = models.DateTimeField(null = True)
+    deleted_at = models.DateTimeField(auto_now = True, null = True)
     deleted_by = models.ForeignKey(User, default = None, blank=True, null=True, on_delete=models.DO_NOTHING, related_name='products_deleted_by')
 
     class Meta:
